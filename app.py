@@ -181,7 +181,3 @@ def apply_cors(response):
     response.headers['Access-Control-Allow-Headers'] = 'Content-Type, Authorization'
     response.headers['Access-Control-Allow-Credentials'] = 'true'
     return response
-
-if __name__ == '__main__':
-    context = ('/etc/letsencrypt/live/vauva.ampiainen.net/fullchain.pem', '/etc/letsencrypt/live/vauva.ampiainen.net/privkey.pem')
-    app.run(debug=True, host='0.0.0.0', port=5003, ssl_context=context)
