@@ -1,0 +1,95 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;  /* Sets the font for the entire body */
+    background-color: #f4f5f6;
+    color: #333;
+}
+
+.container {
+    width: 80%;
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    border-radius: 8px;
+}
+
+.header {
+    display: flex;
+    justify-content: left;
+    margin-bottom: 20px;
+}
+
+.logo {
+    height: 50px;
+    margin-right: 15px;
+}
+
+textarea, input[type="text"] {
+    font-family: Arial, sans-serif;  /* Ensures inputs use the same font as the body */
+    width: 100%;
+    padding: 10px;
+    margin-top: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;  /* Includes padding and border in the element's total width and height */
+    resize: none;  /* Prevents resizing the textarea */
+}
+
+button {
+    padding: 0.7rem 1.5rem;  /* Restored padding settings for better button dimensions */
+    background-color: #0056b3;  /* A strong blue that stands out */
+    color: white;
+    font-family: Arial, sans-serif;  /* Ensures the button text aligns with the overall interface */
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+#responseArea, #feedbackForm {
+    margin-top: 20px;
+}
+
+#correctAnswer {
+    display: none;  /* Initially hidden */
+    width: 100%;  /* Full width */
+    margin-top: 5px;  /* Spacing from question */
+    padding: 10px;  /* Padding for aesthetics */
+    height: 60px;  /* Increased height for two rows */
+    resize: vertical; /* Allows vertical resize only */
+}
+
+.feedback-buttons {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 10px;
+}
+
+.hidden {
+    display: none;
+}
+
+pre {
+    background-color: #f7f7f7; /* Light grey background for code blocks */
+    border: 1px solid #ccc; /* Light grey border around code blocks */
+    border-radius: 4px; /* Rounded corners for the code blocks */
+    padding: 10px; /* Padding inside the code blocks */
+    overflow-x: auto; /* Adds horizontal scrollbar if needed */
+    font-family: 'Courier New', Courier, monospace; /* Monospaced font for code blocks */
+    line-height: normal; /* Normal line height to prevent extra spacing */
+    white-space: pre; /* Preserves whitespace and formatting */
+}
+
+code {
+    font-family: 'Courier New', Courier, monospace; /* Ensures font consistency in nested tags */
+    font-size: 14px; /* Font size for readability */
+    white-space: inherit; /* Inherits whitespace handling from `pre` */
+    background: none; /* No background to avoid double layering */
+    border: none; /* No border to avoid double framing */
+    padding: 0; /* No padding to utilize `pre`'s padding */
+    line-height: inherit; /* Inherits line height from `pre` */
+}
+

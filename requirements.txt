@@ -1,0 +1,10 @@
+Flask
+Flask-SQLAlchemy
+psycopg2-binary
+SQLAlchemy
+openai==0.28
+bleach
+gunicorn
+flask_sqlalchemy
+requests
+flask

@@ -1,0 +1,18 @@
+version: '3.1'
+services:
+  chatbot:
+    image: chatbot
+    ports:
+      - "5003:5003"
+    secrets:
+      - source: ssl_cert
+        target: /etc/ssl/cert.pem
+      - source: ssl_key
+        target: /etc/ssl/privkey.pem
+
+secrets:
+  ssl_cert:
+    file: /etc/letsencrypt/live/vauva.ampiainen.net/cert.pem
+  ssl_key:
+    file: /etc/letsencrypt/live/vauva.ampiainen.net/privkey.pem
+
