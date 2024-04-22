@@ -81,11 +81,9 @@ def process_post(user_input):
 
     response = openai.chat.completions.create(
         engine="gpt-4",
-        max_tokens=1500
+        max_tokens=1500,
         messages=[
-            {"role": "system", "content": "You are a skillful Technology \
-             Specialist. This is your blog called auroranrunner. \
-             Your name is Tapio Vaattanen."},
+            {"role": "system", "content": "You are a skillful Technology Specialist. This is your blog called auroranrunner. Your name is Tapio Vaattanen."},
             {"role": "user", "content": user_input}
         ]
     )
@@ -115,11 +113,9 @@ def stream_response(user_input):
         else:
             response = openai.chat.completions.create(
                 engine="gpt-4",
-                max_tokens=1500
+                max_tokens=1500,
             messages=[
-                {"role": "system", "content": "You are a skillful Technology \
-                 Specialist. This is your blog called auroranrunner. \
-                 Your name is Tapio Vaattanen."},
+                {"role": "system", "content": "You are a skillful Technology Specialist. This is your blog called auroranrunner. Your name is Tapio Vaattanen."},
                 {"role": "user", "content": user_input}
             ]
             )
