@@ -79,12 +79,17 @@ def process_post(user_input):
     if knowledge:
         return {'answer': knowledge.answer, 'chat_id': knowledge.id}
 
-    response = openai.Completion.create(
-        engine="gpt-3.5-turbo-instruct",
-        prompt=f"Answer the following question: {user_input}",
+    response = openai.chat.completions.create(
+        engine="gpt-4",
         max_tokens=1500
+        messages=[
+            {"role": "system", "content": "You are a skillful Technology \
+             Specialist. This is your blog called auroranrunner. \
+             Your name is Tapio Vaattanen."},
+            {"role": "user", "content": user_input}
+        ]
     )
-    answer = response.choices[0].text.strip()
+    answer = response.choices[0].message.content.strip()
     answer = format_response(answer)
 
     try:
@@ -108,12 +113,17 @@ def stream_response(user_input):
         if knowledge:
             yield f"data: {json.dumps({'answer': knowledge.answer, 'chat_id': knowledge.id})}\n\n"
         else:
-            response = openai.Completion.create(
-                engine="gpt-3.5-turbo-instruct",
-                prompt=f"Answer the following question: {user_input}",
-                max_tokens=150
+            response = openai.chat.completions.create(
+                engine="gpt-4",
+                max_tokens=1500
+            messages=[
+                {"role": "system", "content": "You are a skillful Technology \
+                 Specialist. This is your blog called auroranrunner. \
+                 Your name is Tapio Vaattanen."},
+                {"role": "user", "content": user_input}
+            ]
             )
-            answer = response.choices[0].text.strip()
+            answer = response.choices[0].message.content.strip()
             answer = format_response(answer)
 
             new_knowledge = KnowledgeBase(question=user_input, answer=answer)
