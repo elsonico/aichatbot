@@ -2,7 +2,7 @@ Flask
 Flask-SQLAlchemy
 psycopg2-binary
 SQLAlchemy
-openai==0.28
+openai
 bleach
 gunicorn
 flask_sqlalchemy
