@@ -178,4 +178,4 @@ def apply_cors(response):
 
 if __name__ == '__main__':
     context = ('/etc/letsencrypt/live/vauva.ampiainen.net/fullchain.pem', '/etc/letsencrypt/live/vauva.ampiainen.net/privkey.pem')
-    app.run(debug=True, host='0.0.0.0', port=5003, ssl_context=context)
+    app.run(debug=True, host='0.0.0.0', port=5005, ssl_context=context)
