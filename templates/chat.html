@@ -10,84 +10,77 @@
 <body>
     <div class="container">
         <h2>Ask me anything!</h2>
+        <div id="chatArea">
+            <div id="responseArea"></div>
+        </div>
         <form id="chatForm">
-            <textarea id="userQuestion" rows="4" cols="50" placeholder="Enter your question here..." required></textarea>
+            <textarea id="userQuestion" rows="2" placeholder="Enter your question here..." required></textarea>
             <button type="submit" id="submitBtn">Send</button>
         </form>
-        <div id="responseArea"></div>
         <div id="feedbackForm" style="display:none;">
             <p>Was this answer helpful?</p>
-            <button onclick="sendFeedback(true)">Yes</button>
-            <button onclick="sendFeedback(false)">No</button>
+            <button id="feedbackYes">Yes</button>
+            <button id="feedbackNo">No</button>
             <textarea id="correctAnswer" rows="2" placeholder="Please provide the correct answer" style="display:none;"></textarea>
-            <button id="submitCorrectAnswer" onclick="submitCorrectAnswer()" style="display:none;">Submit Correct Answer</button>
+            <button id="submitCorrectAnswer" style="display:none;">Submit Correct Answer</button>
         </div>
+        <input type="hidden" id="chatId">
     </div>
 
     <script>
     $(document).ready(function() {
-        $('#chatForm').submit(function(e) {
-            e.preventDefault(); // Prevent the default form submission
-            sendQuestion();
-        });
-
-        function sendQuestion() {
+        $('#chatForm').on('submit', function(e) {
+            e.preventDefault();
             var question = $('#userQuestion').val();
-            $('#submitBtn').prop('disabled', true).text('Sending...'); // Change button state
+            $('#submitBtn').prop('disabled', true).text('Sending...');  // Disable button and change text to 'Sending...'
+            $('#responseArea').append(`<p><strong>You:</strong> ${question}</p>`);  // Append the user's question
 
             $.ajax({
-                url: 'https://www.auroranrunner.com:5003/chat', // Make sure this URL is correct
+                url: '/chat',
                 type: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify({ question: question }),
                 success: function(response) {
-                    $('#responseArea').html(`<p><strong>Response:</strong> ${response.answer}</p>`);
+                    $('#responseArea').append(`<p><strong>DataReliabot:</strong> ${response.answer}</p>`);  // Append the bot's response
                     $('#feedbackForm').show();
-                    $('#userQuestion').val(''); // Clear the question field
-                    $('#submitBtn').prop('disabled', false).text('Send');
+                    $('#chatId').val(response.chat_id); // Store chat_id for use in feedback
+                    $('#submitBtn').prop('disabled', false).text('Send');  // Re-enable button and reset text to 'Send'
+                    $('#userQuestion').val(''); // Clear the input area
                 },
-                error: function(xhr, status, error) {
-                    $('#responseArea').html(`<p>Error: ${xhr.responseText}</p>`);
-                    $('#submitBtn').prop('disabled', false).text('Send');
+                error: function() {
+                    $('#responseArea').append(`<p>An error occurred. Please try again.</p>`);
+                    $('#submitBtn').prop('disabled', false).text('Send');  // Re-enable button and reset text to 'Send'
                 }
             });
-        }
+        });
 
-        function sendFeedback(wasHelpful) {
-            $('#correctAnswer').toggle(!wasHelpful);
-            $('#submitCorrectAnswer').toggle(!wasHelpful);
+        $('#feedbackYes').on('click', function() {
+            $('#feedbackForm').hide();
+        });
 
-            if (wasHelpful) {
-                postFeedback(true, '');
-            }
-        }
+        $('#feedbackNo').on('click', function() {
+            $('#correctAnswer').show();
+            $('#submitCorrectAnswer').show();
+        });
 
-        function submitCorrectAnswer() {
+        $('#submitCorrectAnswer').on('click', function() {
             var correctAnswer = $('#correctAnswer').val();
-            postFeedback(false, correctAnswer);
-            $('#correctAnswer').val(''); // Optionally clear the correct answer field
-        }
-
-        function postFeedback(wasHelpful, correctAnswer) {
+            var chatId = $('#chatId').val(); // Use the stored chat_id
             $.ajax({
-                url: 'https://www.auroranrunner.com:5003/feedback',
+                url: '/feedback',
                 type: 'POST',
                 contentType: 'application/json',
-                data: JSON.stringify({
-                    chat_id: currentChatId,
-                    feedback: wasHelpful,
-                    correct_answer: correctAnswer
-                }),
+                data: JSON.stringify({ chat_id: chatId, feedback: false, correct_answer: correctAnswer }),
                 success: function(response) {
                     $('#responseArea').append(`<p>${response.message}</p>`);
-                    $('#feedbackForm').hide(); // Hide the feedback form on success
-                },
-                error: function(xhr) {
-                    $('#responseArea').append(`<p>Error sending feedback: ${xhr.responseText}</p>`);
+                    $('#feedbackForm').hide();
+                    $('#correctAnswer').hide();
+                    $('#submitCorrectAnswer').hide();
                 }
             });
-        }
+        });
     });
     </script>
 </body>
 </html>
+

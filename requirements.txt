@@ -6,5 +6,6 @@ openai==0.28
 bleach
 gunicorn
 flask_sqlalchemy
+flask_session
 requests
 flask
