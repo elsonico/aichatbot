@@ -7,6 +7,9 @@ import os, sys, re
 import logging
 from sqlalchemy.exc import IntegrityError
 import json
+from requests.adapters import HTTPAdapter
+from sqlalchemy.orm import sessionmaker
+import requests
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -38,6 +41,25 @@ class KnowledgeBase(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     question = db.Column(db.String(450), unique=True, nullable=False)
     answer = db.Column(db.String, nullable=False)
+
+# Initialize session within an application context
+with app.app_context():
+    Session = sessionmaker(bind=db.engine)
+
+class DataEnrichmentAdapter(HTTPAdapter):
+    def send(self, request, **kwargs):
+        """Modify request to enhance with external data."""
+        session = Session()
+        results = session.query(KnowledgeBase).filter(KnowledgeBase.question.like('%data%')).all()
+        data_json = [{'question': row.question, 'answer': row.answer} for row in results]
+        request.headers['X-Data-Reference'] = str(data_json)
+        return super(DataEnrichmentAdapter, self).send(request, **kwargs)
+
+# Setup the session with the custom adapter
+session = requests.Session()
+adapter = DataEnrichmentAdapter()
+session.mount('https://api.openai.com', adapter)
+openai.requestssession = session  # Ensure OpenAI uses the customized session
 
 @app.route('/')
 def home():
