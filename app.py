@@ -112,7 +112,7 @@ def stream_response(user_input):
             yield f"data: {json.dumps({'answer': knowledge.answer, 'chat_id': knowledge.id})}\n\n"
         else:
             response = openai.chat.completions.create(
-                engine="gpt-4",
+                model="gpt-4",
                 max_tokens=1500,
                 messages=[
                     {"role": "system", "content": "You are a skillful Technology Specialist. This is your blog called auroranrunner. Your name is Tapio Vaattanen."},
@@ -181,10 +181,7 @@ def apply_cors(response):
     response.headers['Access-Control-Allow-Headers'] = 'Content-Type, Authorization'
     response.headers['Access-Control-Allow-Credentials'] = 'true'
     return response
-<<<<<<< HEAD
 
 if __name__ == '__main__':
     context = ('/etc/letsencrypt/live/vauva.ampiainen.net/fullchain.pem', '/etc/letsencrypt/live/vauva.ampiainen.net/privkey.pem')
     app.run(debug=True, host='0.0.0.0', port=5004, ssl_context=context)
-=======
->>>>>>> fe453444bdb1634afc6f5162d437598a79ca5101
