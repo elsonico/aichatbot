@@ -80,7 +80,7 @@ def process_post(user_input):
         return {'answer': knowledge.answer, 'chat_id': knowledge.id}
 
     response = openai.chat.completions.create(
-        engine="gpt-4",
+        model="gpt-4",
         max_tokens=1500,
         messages=[
             {"role": "system", "content": "You are a skillful Technology Specialist. This is your blog called auroranrunner. Your name is Tapio Vaattanen."},
@@ -114,10 +114,10 @@ def stream_response(user_input):
             response = openai.chat.completions.create(
                 engine="gpt-4",
                 max_tokens=1500,
-            messages=[
-                {"role": "system", "content": "You are a skillful Technology Specialist. This is your blog called auroranrunner. Your name is Tapio Vaattanen."},
-                {"role": "user", "content": user_input}
-            ]
+                messages=[
+                    {"role": "system", "content": "You are a skillful Technology Specialist. This is your blog called auroranrunner. Your name is Tapio Vaattanen."},
+                    {"role": "user", "content": user_input}
+                ]
             )
             answer = response.choices[0].message.content.strip()
             answer = format_response(answer)
@@ -184,4 +184,4 @@ def apply_cors(response):
 
 if __name__ == '__main__':
     context = ('/etc/letsencrypt/live/vauva.ampiainen.net/fullchain.pem', '/etc/letsencrypt/live/vauva.ampiainen.net/privkey.pem')
-    app.run(debug=True, host='0.0.0.0', port=5003, ssl_context=context)
+    app.run(debug=True, host='0.0.0.0', port=5004, ssl_context=context)
