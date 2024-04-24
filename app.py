@@ -8,12 +8,15 @@ import os, sys, re
 import logging
 from sqlalchemy.exc import IntegrityError
 import json
+from flask_cors import CORS
 
 logging.basicConfig(level=logging.DEBUG)
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your_secret_key_here'  # Required for session management
 app.config['SESSION_TYPE'] = 'filesystem'  # Specifies that the session will be stored in the filesystem
+CORS(app, resources={r"/chat*": {"origins": "https://www.auroranrunner.com"}})
+
 Session(app)  # Initialize the session
 
 # Database connection info from environment variables
@@ -120,7 +123,7 @@ def generate_prompt(messages):
         if message['role'] == 'user':
             prompt += f"User: {message['content']}\n"
         elif message['role'] == 'assistant':
-            prompt += f"Assistant: {message['content']}\n"
+            prompt += f"{message['content']}\n"
     return prompt
 
 def format_response(text):

@@ -41,7 +41,7 @@
                 contentType: 'application/json',
                 data: JSON.stringify({ question: question }),
                 success: function(response) {
-                    $('#responseArea').append(`<p><strong>DataReliabot:</strong> ${response.answer}</p>`);  // Append the bot's response
+                    $('#responseArea').append(`<p><strong>AI Chatbot:</strong> ${response.answer}</p>`);  // Append the bot's response
                     $('#feedbackForm').show();
                     $('#chatId').val(response.chat_id); // Store chat_id for use in feedback
                     $('#submitBtn').prop('disabled', false).text('Send');  // Re-enable button and reset text to 'Send'
