@@ -9,3 +9,5 @@ flask_sqlalchemy
 flask_session
 requests
 flask
+CORS
+flask_cors
