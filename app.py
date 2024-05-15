@@ -102,7 +102,7 @@ def process_post(user_input):
         return {'answer': knowledge.answer, 'chat_id': knowledge.id}
 
     response = openai.chat.completions.create(
-        model="gpt-4",
+        model="gpt-4o",
         max_tokens=1500,
         messages=[
             {"role": "system", "content": "You are a skillful Technology Specialist. This is your blog called auroranrunner. Your name is Tapio Vaattanen."},
@@ -156,16 +156,15 @@ def stream_response(user_input):
 
 def format_response(text):
     """
-    Formats text by handling bold within numbered list items correctly,
-    applying general text formatting, managing code blocks, and styling comments with # retained.
+    Formats text by handling headings, numbered list items, bold text, and code blocks.
     """
     formatted_text = ""
-    in_code_block = False  # Flag to check if inside a code block
-    buffer = ""  # Buffer to store text for code blocks
+    in_code_block = False
+    buffer = ""
 
     lines = text.split('\n')
     for line in lines:
-        if line.strip().startswith("```"):  # Check for code block toggle
+        if line.strip().startswith("```"):
             in_code_block = not in_code_block
             if not in_code_block:
                 formatted_text += f"<pre><code>{buffer}</code></pre>"
@@ -176,25 +175,28 @@ def format_response(text):
             buffer += line + '\n'
             continue
 
-        # Handling comments in the code specifically
+        # Handle headings starting with "#"
         if line.strip().startswith("#"):
-            formatted_text += f"<p><strong>{line.strip()}</strong></p>"
-        else:
-            # Handling bold within numbered list items
-            search_result = re.search(r'^(\d+)\.\s+\*\*(.*?)\*\*:\s*(.*)$', line)
-            if search_result:
-                number, bold_text, the_rest = search_result.groups()
-                formatted_text += f"<p>{number}. <strong>{bold_text}</strong>: {the_rest}</p>"
-            else:
-                # Apply bold text formatting for other lines
-                line = re.sub(r'\*\*(.*?)\*\*', r'<strong>\1</strong>', line)
-                formatted_text += f"<p>{line}</p>"
+            heading_level = len(line.split(' ')[0])  # Count the number of '#' characters to determine heading level
+            heading_text = line.strip('#').strip()  # Remove '#' characters and leading/trailing whitespace
+            formatted_text += f"<h{heading_level}>{heading_text}</h{heading_level}>"
+            continue
 
-    # Ensure closing code block if text ends within one
+        # Handle bold within numbered list items
+        search_result = re.search(r'^(\d+)\.\s+\*\*(.*?)\*\*:\s*(.*)$', line)
+        if search_result:
+            number, bold_text, the_rest = search_result.groups()
+            formatted_text += f"<p>{number}. <strong>{bold_text}</strong>: {the_rest}</p>"
+        else:
+            # Apply bold text formatting for other lines
+            line = re.sub(r'\*\*(.*?)\*\*', r'<strong>\1</strong>', line)
+            formatted_text += f"<p>{line}</p>"
+
     if in_code_block:
         formatted_text += f"<pre><code>{buffer}</code></pre>"
 
     return formatted_text
+
 
 @app.after_request
 def apply_cors(response):
