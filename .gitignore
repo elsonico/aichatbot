@@ -1,0 +1,9 @@
+__pycache__/
+app.py_broken
+app.py_format_that_works
+app.py_toimii_standalone
+flask_session/
+myVimLog.txt
+sql_unload.py
+templates/chat.html_broken
+templates/chat.html_toimii_standalone
